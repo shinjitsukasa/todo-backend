@@ -1,2 +1,54 @@
-package com.project.todomanagementbackend.service.impl;public class TodoServiceImpl {
+package com.project.todomanagementbackend.service.impl;
+
+import com.project.todomanagementbackend.dto.TodoDto;
+import com.project.todomanagementbackend.entity.Todo;
+import com.project.todomanagementbackend.exception.ResourceNotFoundException;
+import com.project.todomanagementbackend.repository.TodoRepository;
+import com.project.todomanagementbackend.service.TodoService;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@AllArgsConstructor
+public class TodoServiceImpl implements TodoService {
+
+    private TodoRepository todoRepository;
+
+    private ModelMapper modelMapper;
+
+    @Override
+    public TodoDto addTodo(TodoDto todoDto) {
+
+        // convert TodoDto into Todo Jpa entity
+
+        Todo todo = modelMapper.map(todoDto, Todo.class);
+
+        // Todo Jpa entity
+        Todo savedTodo = todoRepository.save(todo);
+
+        // Convert saved Todo Jpa entity object into TodoDto object
+        TodoDto savedToDto = modelMapper.map(savedTodo, TodoDto.class);
+
+        return savedToDto;
+    }
+
+    @Override
+    public TodoDto getTodo(Long id) {
+
+        Todo todo = todoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Todo not found with the id: " + id));
+
+        return modelMapper.map(todo, TodoDto.class);
+    }
+
+    @Override
+    public List<TodoDto> getAllTodos() {
+
+        List<Todo> todos = todoRepository.findAll();
+
+        return todos.stream().map((todo) -> modelMapper.map(todo, TodoDto.class)).collect(Collectors.toList());
+    }
 }
