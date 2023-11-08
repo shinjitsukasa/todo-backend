@@ -13,4 +13,10 @@ public interface TodoService {
     List<TodoDto> getAllTodos();
 
     TodoDto updateTodo(Long todoId, TodoDto updateTodo);
+
+    void deleteTodo(Long todoId);
+
+    TodoDto completeTodo(Long todoId);
+
+    TodoDto incompleteTodo(Long todoId);
 }
