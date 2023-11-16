@@ -31,9 +31,8 @@ public class TodoServiceImpl implements TodoService {
         Todo savedTodo = todoRepository.save(todo);
 
         // Convert saved Todo Jpa entity object into TodoDto object
-        TodoDto savedToDto = modelMapper.map(savedTodo, TodoDto.class);
 
-        return savedToDto;
+        return modelMapper.map(savedTodo, TodoDto.class);
     }
 
     @Override
@@ -69,7 +68,7 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public void deleteTodo(Long todoId) {
 
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new ResourceNotFoundException("Todo not found with the id: " + todoId));
+        todoRepository.findById(todoId).orElseThrow(() -> new ResourceNotFoundException("Todo not found with the id: " + todoId));
 
         todoRepository.deleteById(todoId);
 
@@ -88,7 +87,6 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public TodoDto incompleteTodo(Long todoId) {
-
         Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new ResourceNotFoundException("Todo not found with the id: " + todoId));
 
         todo.setCompleted(Boolean.FALSE);
